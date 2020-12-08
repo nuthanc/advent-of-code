@@ -1,7 +1,10 @@
 # Report Repair: https://adventofcode.com/2020/day/1
 
 # Find the two entries that sum to 2020
-with open('input.txt') as f:
+from os import path
+THIS_DIR = path.dirname(path.realpath(__file__))
+file_path = path.join(THIS_DIR, 'input.txt')
+with open(file_path) as f:
     expenses_string = f.read().splitlines()
 
 expenses = list(map(int, expenses_string))
