@@ -1,7 +1,7 @@
 # Report Repair: https://adventofcode.com/2020/day/1
 
 # Find the two entries that sum to 2020
-with open('first.txt') as f:
+with open('input.txt') as f:
     expenses_string = f.read().splitlines()
 
 expenses = list(map(int, expenses_string))
