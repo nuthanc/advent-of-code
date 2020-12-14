@@ -13,17 +13,12 @@ def slope(r, d=1):
     val = 0
     down = d
     right = r
-    for i in range(d, len(map), d):
-        if down < len(map):
-            # print(down, right)
-            # print(map[down])
-            # print(map[down][right])
-            if map[down][right] == '#':
-                val += 1
-            right = (right + r) % len(map[0])
-            down += d
-        else:
-            break
+    while down < len(map):
+        if map[down][right] == '#':
+            val += 1
+        right = (right + r) % len(map[0])
+        down += d
+
     return val
 
 slopes = [(1,1), (3,1), (5,1), (7,1), (1,2)]
