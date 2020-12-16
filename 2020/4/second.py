@@ -9,6 +9,7 @@ with open(file_path) as f:
 
 count = 0
 passports = inputs.split("\n\n")
+print(passports)
 req_list = ['byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid']
 for passport in passports:
     res = all(ele in passport for ele in req_list)
