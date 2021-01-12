@@ -14,9 +14,9 @@ while i < len(boot_code):
         op, num = boot_code[i].split(" ")
         num = int(num)
         if op == 'jmp':
-            i = i + num
             if num < 0:
                 print(i, num)
+            i = i + num
             continue
         if op == 'acc':
             acc += num
@@ -25,4 +25,6 @@ while i < len(boot_code):
     i += 1
 
 print(acc)
-# Hint: Think of where the last negative jump occurs
+# Wrong Hint: Think of where the last negative jump occurs
+# Hint: Consider nop operation whose sum exceeds 630
+# I guessed 1140, but it was too high
