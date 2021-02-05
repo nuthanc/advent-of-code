@@ -43,3 +43,4 @@ while i < len(boot_code):
     i += 1
 
 print(acc)
+# IndexError: pop from empty list
