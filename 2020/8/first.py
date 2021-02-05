@@ -7,10 +7,10 @@ with open(file_path) as f:
 
 i = 0
 acc = 0
-line = set()
+visited = set()
 while i < len(boot_code):
-    if i not in line:
-        line.add(i)
+    if i not in visited:
+        visited.add(i)
         op, num = boot_code[i].split(" ")
         num = int(num)
         if op == 'jmp':

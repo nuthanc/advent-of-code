@@ -7,22 +7,40 @@ with open(file_path) as f:
 
 i = 0
 acc = 0
-line = set()
+visited = set()
+op_index = []
+opChanged = False
+afterChangeAcc = 0
 while i < len(boot_code):
-    if i not in line:
-        line.add(i)
+    if i not in visited:
+        visited.add(i)
         op, num = boot_code[i].split(" ")
         num = int(num)
         if op == 'jmp':
-            i = i + num
-            continue
-        if op == 'acc':
-            acc += num
+            # boot_code[i] = f'nop {num}'
+            if not opChanged:
+                op_index.append(i + num)
+                opChanged = not opChanged
+            else:
+                i = i + num
+        elif op == 'nop':
+            # boot_code[i] = f'jmp {num}'
+            if not opChanged:
+                op_index.append(i+1)
+                i = i + num
+                opChanged = not opChanged
+                continue
+        elif op == 'acc':
+            if opChanged:
+                afterChangeAcc += num
+            acc += num 
     else:
-        break
+        i = op_index.pop()
+        opChanged = False
+        acc -= afterChangeAcc
+        afterChangeAcc = 0
+        continue
     i += 1
 
 print(acc)
-# Hint to a Hint: Think of where the last negative jump occurs by printing all negative jmps
-# Hint: Consider nop operation whose sum exceeds 630
 # I guessed 1140, but it was too high
