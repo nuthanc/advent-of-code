@@ -43,4 +43,3 @@ while i < len(boot_code):
     i += 1
 
 print(acc)
-# I guessed 1140, but it was too high
