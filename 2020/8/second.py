@@ -8,9 +8,10 @@ with open(file_path) as f:
 i = 0
 acc = 0
 visited = set()
-op_index = []
+op_index = None
 opChanged = False
 afterChangeAcc = 0
+afterChangeVisited = []
 while i < len(boot_code):
     if i not in visited:
         visited.add(i)
@@ -19,28 +20,33 @@ while i < len(boot_code):
         if op == 'jmp':
             # boot_code[i] = f'nop {num}'
             if not opChanged:
-                op_index.append(i + num)
+                op_index = (i + num)
                 opChanged = not opChanged
+                i += 1
             else:
+                afterChangeVisited.append(i)
                 i = i + num
         elif op == 'nop':
             # boot_code[i] = f'jmp {num}'
             if not opChanged:
-                op_index.append(i+1)
+                op_index = (i+1)
                 i = i + num
                 opChanged = not opChanged
-                continue
+            else:
+                afterChangeVisited.append(i)
+                i += 1
         elif op == 'acc':
             if opChanged:
+                afterChangeVisited.append(i)
                 afterChangeAcc += num
             acc += num 
+            i += 1
     else:
-        i = op_index.pop()
+        i = op_index
+        op_index = None
         opChanged = False
         acc -= afterChangeAcc
         afterChangeAcc = 0
-        continue
-    i += 1
 
 print(acc)
-# IndexError: pop from empty list
+# IndexError: pop from empty list(Caused by visited, I think)
