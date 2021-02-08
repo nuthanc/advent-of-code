@@ -47,6 +47,9 @@ while i < len(boot_code):
         opChanged = False
         acc -= afterChangeAcc
         afterChangeAcc = 0
+        for index in afterChangeVisited:
+            visited.remove(index)
+        afterChangeVisited = []
 
 print(acc)
 # IndexError: pop from empty list(Caused by visited, I think)
