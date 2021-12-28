@@ -51,50 +51,43 @@ def read_input():
         inp = f.read().splitlines()
     return inp
 
-# def closure():
-#     count = 0
-#     def overlap(x_constant=None, y_constant=None):
-#         pass
-#     return overlap
+class Helper():
+    def __init__(self):
+        self.count = 0
+        self.seen = dict()
 
+    def overlap(self, a, b, x_constant=None, y_constant=None):
+        if a < b:
+            p1 = a
+            p2 = b
+        else:
+            p1 = b
+            p2 = a
+        for i in range(p1, p2+1):
+            key = (i, y_constant) if y_constant else (x_constant, i)
+            if key in self.seen.keys():
+                if self.seen[key] == 1:
+                    self.count += 1
+                self.seen[key] += 1
+            else:
+                self.seen[key] = 1
+    
+    def get_count(self):
+        return self.count
 
 def first(vents):
-    seen = dict()
-    count = 0
+    helper = Helper()
     for vent in vents:
         start, end = vent.split('->')
         x1, y1 = map(int, start.strip().split(','))
         x2, y2 = map(int, end.strip().split(','))
         if x1 == x2 or y1 == y2:
             if y1 == y2:
-                if x1 < x2:
-                    p1 = x1
-                    p2 = x2
-                else:
-                    p1 = x2
-                    p2 = x1
-                for i in range(p1, p2+1):
-                    if (i, y1) in seen.keys():
-                        if seen[(i,y1)] == 1:
-                            count += 1
-                        seen[(i, y1)] += 1
-                    else:
-                        seen[(i, y1)] = 1
+                count = helper.overlap(x1, x2, y_constant=y1)
             else:
-                if y1 < y2:
-                    p1 = y1
-                    p2 = y2
-                else:
-                    p1 = y2
-                    p2 = y1
-                for i in range(p1, p2+1):
-                    if (x1, i) in seen:
-                        if seen[(x1, i)] == 1:
-                            count += 1
-                        seen[(x1, i)] += 1
-                    else:
-                        seen[(x1, i)]=1
-    print(count)
+                count = helper.overlap(y1, y2, x_constant=x1)
+
+    print(helper.get_count())
 
 def solve():
     vents = read_input()
