@@ -71,6 +71,26 @@ class Helper():
                 self.seen[key] += 1
             else:
                 self.seen[key] = 1
+                
+    def calc_seen_and_count(self, i,j):
+        key = (i, j)
+        if key in self.seen.keys():
+            if self.seen[key] == 1:
+                self.count += 1
+            self.seen[key] += 1
+        else:
+            self.seen[key] = 1
+                
+    def overlap_two(self, x1, x2, y1, y2):
+        xdir = 1 if x1 < x2 else -1
+        ydir = 1 if y1 < y2 else -1
+        i = x1
+        j = y1
+        while i != x2 and j != y2:
+            self.calc_seen_and_count(i,j)
+            i = i + xdir
+            j = j + ydir
+        self.calc_seen_and_count(i, j)
     
     def get_count(self):
         return self.count
@@ -83,15 +103,31 @@ def first(vents):
         x2, y2 = map(int, end.strip().split(','))
         if x1 == x2 or y1 == y2:
             if y1 == y2:
-                count = helper.overlap(x1, x2, y_constant=y1)
+                helper.overlap(x1, x2, y_constant=y1)
             else:
-                count = helper.overlap(y1, y2, x_constant=x1)
+                helper.overlap(y1, y2, x_constant=x1)
 
+    print(helper.get_count())
+    
+def second(vents):
+    helper = Helper()
+    for vent in vents:
+        start, end = vent.split('->')
+        x1, y1 = map(int, start.strip().split(','))
+        x2, y2 = map(int, end.strip().split(','))
+        if x1 == x2 or y1 == y2:
+            if y1 == y2:
+                helper.overlap(x1, x2, y_constant=y1)
+            else:
+                helper.overlap(y1, y2, x_constant=x1)
+        else:
+            helper.overlap_two(x1, x2, y1, y2)
+    
     print(helper.get_count())
 
 def solve():
     vents = read_input()
     first(vents)
-    # second(vents)
+    second(vents)
 
 solve()
