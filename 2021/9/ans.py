@@ -1,4 +1,3 @@
-from audioop import mul
 from os import path
 
 def read_input():
