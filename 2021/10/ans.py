@@ -31,9 +31,41 @@ def first(chunk_lines):
         score += closing_braces_points[brace] * count
     print(score)
 
+def second(chunk_lines):
+    closing_braces_points = {')': 1, ']': 2, '}': 3, '>': 4}
+    opening_to_closing_braces = {'(': ')', '[': ']', '{': '}', '<': '>'}
+    total_scores = []
+    for chunks in chunk_lines:
+        stack = []
+        corrupted = False
+        total_score = 0
+        for brace in chunks:
+            if brace in opening_to_closing_braces:
+                stack.append(brace)
+            else:
+                if len(stack):
+                    opening_brace = stack.pop()
+                    if opening_to_closing_braces[opening_brace] == brace:
+                        continue
+                corrupted = True
+                break
+        if len(stack) and not corrupted:
+            while len(stack):
+                opening_brace = stack.pop()
+                closing_brace = opening_to_closing_braces[opening_brace]
+                total_score *= 5
+                total_score += closing_braces_points[closing_brace]
+            total_scores.append(total_score)
+    
+    total_scores.sort()
+    # print(total_scores)
+    print(total_scores[int(len(total_scores)/2)])
+
+
 def solution():
     chunk_lines = read_input()
-    first(chunk_lines)
+    # first(chunk_lines)
+    second(chunk_lines)
 
 
 solution()
