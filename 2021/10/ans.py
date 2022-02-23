@@ -1,4 +1,3 @@
-from asyncore import read
 from os import path
 
 
