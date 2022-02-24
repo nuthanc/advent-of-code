@@ -35,23 +35,38 @@ def bfs(energies, row, col, flashed_set, directions):
                         queue.append((neighbor_row, neighbor_col))
     return flashes
 
+def calculate_flashes(row_length, col_length, energies, directions):
+    flashed_set = set()
+    flashes = 0
+    for row in range(row_length):
+        for col in range(col_length):
+            if (row, col) not in flashed_set:
+                energies[row][col] += 1
+                if energies[row][col] > 9:
+                    flashes += bfs(energies, row, col, flashed_set, directions)
+    return flashes
+
 
 def first(energies, directions, steps):
     row_length = len(energies)
     col_length = len(energies[0])
-    flashes = 0
+    total_flashes = 0
     for _ in range(steps):
-        flashed_set = set()
-        for row in range(row_length):
-            for col in range(col_length):
-                if (row, col) not in flashed_set:
-                    energies[row][col] += 1
-                    if energies[row][col] > 9:
-                        flashes += bfs(energies, row, col, flashed_set, directions)
-    print(flashes)
-                    
+        total_flashes += calculate_flashes(row_length, col_length, energies, directions)
+    print(total_flashes)
 
 
+def second(energies, directions):
+    total_octopuses = len(energies) * len(energies[0])
+    row_length = len(energies)
+    col_length = len(energies[0])
+    count = 0
+    while True:
+        count += 1
+        flashes = calculate_flashes(row_length, col_length, energies, directions)
+        if total_octopuses == flashes:
+            print(count)
+            break
 
 
 
@@ -59,6 +74,10 @@ def first(energies, directions, steps):
 def solution():
     energies = read_input()
     directions = [(-1,0), (-1,1), (0,1), (1,1), (1,0), (1,-1), (0,-1), (-1,-1)]
-    first(energies.copy(), directions, steps=100)
+    energies_copy = [row[:] for row in energies]
+    first(energies_copy, directions, steps=100)
+    # from copy import deepcopy
+    # first(deepcopy(energies), directions, steps=100)
+    second(energies, directions)
 
 solution()
