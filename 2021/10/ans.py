@@ -1,7 +1,7 @@
 from os import path
 
 
-def read_input():
+def read_file():
     THIS_DIR = path.dirname(path.realpath(__file__))
     file_path = path.join(THIS_DIR, 'input.txt')
     with open(file_path) as f:
@@ -30,6 +30,7 @@ def first(chunk_lines):
         score += closing_braces_points[brace] * count
     print(score)
 
+
 def second(chunk_lines):
     closing_braces_points = {')': 1, ']': 2, '}': 3, '>': 4}
     opening_to_closing_braces = {'(': ')', '[': ']', '{': '}', '<': '>'}
@@ -55,14 +56,14 @@ def second(chunk_lines):
                 total_score *= 5
                 total_score += closing_braces_points[closing_brace]
             total_scores.append(total_score)
-    
+
     total_scores.sort()
     # print(total_scores)
     print(total_scores[int(len(total_scores)/2)])
 
 
 def solution():
-    chunk_lines = read_input()
+    chunk_lines = read_file()
     # first(chunk_lines)
     second(chunk_lines)
 

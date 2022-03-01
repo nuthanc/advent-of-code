@@ -44,12 +44,14 @@
 '''
 from os import path
 
-def read_input():
+
+def read_file():
     THIS_DIR = path.dirname(path.realpath(__file__))
     file_path = path.join(THIS_DIR, 'input.txt')
     with open(file_path) as f:
         inp = f.read().splitlines()
     return inp
+
 
 class Helper():
     def __init__(self):
@@ -71,8 +73,8 @@ class Helper():
                 self.seen[key] += 1
             else:
                 self.seen[key] = 1
-                
-    def calc_seen_and_count(self, i,j):
+
+    def calc_seen_and_count(self, i, j):
         key = (i, j)
         if key in self.seen.keys():
             if self.seen[key] == 1:
@@ -80,20 +82,21 @@ class Helper():
             self.seen[key] += 1
         else:
             self.seen[key] = 1
-                
+
     def overlap_two(self, x1, x2, y1, y2):
         xdir = 1 if x1 < x2 else -1
         ydir = 1 if y1 < y2 else -1
         i = x1
         j = y1
         while i != x2 and j != y2:
-            self.calc_seen_and_count(i,j)
+            self.calc_seen_and_count(i, j)
             i = i + xdir
             j = j + ydir
         self.calc_seen_and_count(i, j)
-    
+
     def get_count(self):
         return self.count
+
 
 def first(vents):
     helper = Helper()
@@ -108,7 +111,8 @@ def first(vents):
                 helper.overlap(y1, y2, x_constant=x1)
 
     print(helper.get_count())
-    
+
+
 def second(vents):
     helper = Helper()
     for vent in vents:
@@ -122,12 +126,14 @@ def second(vents):
                 helper.overlap(y1, y2, x_constant=x1)
         else:
             helper.overlap_two(x1, x2, y1, y2)
-    
+
     print(helper.get_count())
 
+
 def solve():
-    vents = read_input()
+    vents = read_file()
     first(vents)
     second(vents)
+
 
 solve()

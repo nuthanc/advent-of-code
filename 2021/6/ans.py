@@ -26,12 +26,14 @@ Step 7: Time and Space Complexity
 '''
 from os import path
 
-def read_input():
+
+def read_file():
     THIS_DIR = path.dirname(path.realpath(__file__))
     file_path = path.join(THIS_DIR, 'input.txt')
     with open(file_path) as f:
         inp = f.read()
     return inp
+
 
 def first(fish_timer, days):
     for day in range(days):
@@ -42,31 +44,37 @@ def first(fish_timer, days):
                 fish_timer[i] = 7
             fish_timer[i] -= 1
     print(len(fish_timer))
-    
+
+
 def spawn_cycle(rem_days, dp):
     if rem_days < 0:
         return 0
     elif dp.get(rem_days):
         return dp.get(rem_days)
     else:
-        dp[rem_days] = 1 + spawn_cycle(rem_days-7, dp) + spawn_cycle(rem_days-9, dp)
+        dp[rem_days] = 1 + \
+            spawn_cycle(rem_days-7, dp) + spawn_cycle(rem_days-9, dp)
         return dp[rem_days]
-    
+
+
 def second(fish_timer, days):
     total = 0
     dp = {}
     for timer in fish_timer:
         rem_days = days - (timer + 1)
         if rem_days >= 0:
-            total += 1 + spawn_cycle(rem_days-7, dp) + spawn_cycle(rem_days-9, dp)
+            total += 1 + spawn_cycle(rem_days-7, dp) + \
+                spawn_cycle(rem_days-9, dp)
     print(total + len(fish_timer))
 
+
 def solution():
-    inp = read_input()
+    inp = read_file()
     fish_timer = [int(timer) for timer in inp.split(',')]
     days = 80
     first(fish_timer.copy(), days)
     days = 256
     second(fish_timer, days)
+
 
 solution()

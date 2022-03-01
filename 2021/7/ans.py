@@ -29,12 +29,13 @@ Brute force solution of 2 loops, but what about numbers not in list?
 from os import path
 
 
-def read_input():
+def read_file():
     THIS_DIR = path.dirname(path.realpath(__file__))
     file_path = path.join(THIS_DIR, 'input.txt')
     with open(file_path) as f:
         inp = f.read()
     return [int(pos) for pos in inp.split(',')]
+
 
 def first(inputs):
     positions = inputs.copy()
@@ -47,6 +48,7 @@ def first(inputs):
         least_fuel += abs(position - opt_position)
     print(least_fuel)
 
+
 def second(inputs):
     positions = inputs.copy()
     opt_position = round(sum(positions) / len(positions))
@@ -55,7 +57,7 @@ def second(inputs):
         n = abs(position - opt_position)
         least_fuel += ((n * (n+1))/2)
     print(least_fuel)
-    
+
 
 def tester(inputs):
     positions = inputs.copy()
@@ -77,10 +79,12 @@ def tester(inputs):
     print(sum(positions))
     print(len(positions))
 
+
 def solution():
-    positions = read_input()
+    positions = read_file()
     # first(positions)
     tester(positions)
     # second(positions)  # Getting 489 instead of 488. Pos is 488.507
+
 
 solution()
