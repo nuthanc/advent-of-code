@@ -8,10 +8,11 @@ def read_file():
     adj_list = {}
     for connection in connections:
         src, dest = connection.split('-')
-        if src in adj_list:
-            adj_list[src].append(dest)
-        else:
-            adj_list[src] = [dest]
+        if src != 'end' and dest != 'start':
+            if src in adj_list:
+                adj_list[src].append(dest)
+            else:
+                adj_list[src] = [dest]
         if src != 'start' and dest != 'end':
             if dest in adj_list:
                 adj_list[dest].append(src)
@@ -20,44 +21,72 @@ def read_file():
     return adj_list
 
 def decision(cave, path_set):
-    # if cave == 'end' or (cave.islower() and cave in paths):
     if cave == 'end' or cave in path_set:
         return False
     return True
 
-# def bt(paths, adj_list, cave):
 def bt(path_set, adj_list, cave):
     count = 0
     # Add
-    # paths.append(cave)
     if cave.islower():
         path_set.add(cave)
     for neighbor in adj_list[cave]:
         # Decide
-        # if decision(neighbor, paths):
-        #     count += bt(paths, adj_list, neighbor)
         if decision(neighbor, path_set):
             count += bt(path_set, adj_list, neighbor)
         if neighbor == 'end':
             count += 1
     # Removal
-    # paths.pop()
     if cave.islower():
         path_set.remove(cave)
     return count
         
 
 def first(adj_list):
-    # paths = []
-    # total = bt(paths, adj_list, cave='start')
     path_set = set()
     total = bt(path_set, adj_list, cave='start')
+    print(total)
+
+
+def decision_second(cave, path_set, twice_set):
+    if cave == 'end':
+        return False
+    if cave in path_set:
+        if len(twice_set) == 0:
+            twice_set.add(cave)
+            return True
+        return False
+    return True
+
+def bt_second(path_set, adj_list, cave, twice_set):
+    count = 0
+    # Add
+    if cave.islower():
+        path_set.add(cave)
+    for neighbor in adj_list[cave]:
+        # Decide
+        if decision_second(neighbor, path_set, twice_set):
+            count += bt_second(path_set, adj_list, neighbor, twice_set)
+        if neighbor == 'end':
+            count += 1
+    # Removal
+    if cave.islower():
+        if cave not in twice_set:
+            path_set.remove(cave)
+        else:
+            twice_set.remove(cave)
+    return count
+
+def second(adj_list):
+    path_set = set()
+    twice_set = set()
+    total = bt_second(path_set, adj_list, cave='start', twice_set=twice_set)
     print(total)
         
 
 def solution():
     adj_list = read_file()
-    print(adj_list)
-    first(adj_list)    
+    # first(adj_list) 
+    second(adj_list)
         
 solution()
