@@ -1,6 +1,13 @@
 from os import path
 import heapq
 
+'''
+Check this answer: https://github.com/hyper-neutrino/advent-of-code/blob/main/2021/day15p1.py
+
+* Author used only visited and heap
+* IN 2d arrays without negative weights, going back increases the weight
+* So just visited and PQ is sufficient
+'''
 
 def read_file():
     THIS_DIR = path.dirname(path.realpath(__file__))
