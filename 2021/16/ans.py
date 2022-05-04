@@ -31,7 +31,7 @@ def first(binary, cur):
                 if binary[i] == '0':
                     cur = i + 5
                     break
-            # print(int(literal_val, 2))
+            print(int(literal_val, 2))
         else:
             length_type_id = binary[cur]
             cur += 1
@@ -40,7 +40,6 @@ def first(binary, cur):
                 cur += 15
                 subpackets_len = cur + total_len
                 while cur < subpackets_len: 
-                    # first(binary, cur, version_sum, subpackets_len, float('inf'))
                     vsum, cur_ptr = first(binary, cur)
                     version_sum += vsum
                     cur = cur_ptr
@@ -49,7 +48,6 @@ def first(binary, cur):
                 cur += 11
                 while num_subpackets > 0:
                     num_subpackets -= 1
-                # first(binary, cur, version_sum, float('inf'), num_subpackets)
                     vsum, cur_ptr = first(binary, cur)
                     version_sum += vsum
                     cur = cur_ptr
