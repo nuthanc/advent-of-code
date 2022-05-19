@@ -1,3 +1,39 @@
+'''
+Step 1: Verify the Constraints
+
+* Input is hexadecimal number
+
+Step 2: Write down some test cases
+
+* 9C0141080250320F1802104A08
+Packet id: 7
+Packet id: 0
+Current value:  1
+Values:  [inf]
+Operators:  [7, 0]
+
+Current value:  3
+Values:  [1]
+Operators:  [7, 0]
+
+Packet id: 1
+Current value:  2
+Values:  [4, inf]
+Operators:  [7, 1]
+
+Current value:  2
+Values:  [4, 2]
+Operators:  [7, 1]
+
+Current value:  16
+Values:  [inf]
+Operators:  [7]
+
+16
+* Test cases where there is delay in processing of sub-packets due to the presence of another operator immediately
+* Test cases where there isn't any delay in processing of sub-packets
+    * Is there a correlation between operator index and value index?
+'''
 from os import path
 
 
@@ -56,41 +92,54 @@ def first(binary, cur):
 
 
 def perform_operation(current_value, operators, values):
-    print('Current value: ', current_value)
+    print(f'Current value: {current_value}')
     print('Values: ', values)
     print('Operators: ', operators, end='\n\n')
-    operator_id = operators[-1]
+    operator_id, arrival = operators[-1]
     if values[-1] == float('inf'):
         values.pop()
         values.append(current_value)
     else:
         if operator_id == 0:
-            values[-1] += current_value
+            val = values.pop() + current_value
+            while len(values) >= arrival: # Wrong as I should also consider values arrival
+                val += values.pop()
+            values.append(val)
         elif operator_id == 1:
-            values[-1] *= current_value
+            val = values.pop() * current_value
+            while len(values) >= arrival:
+                val *= values.pop()
+            values.append(val)
         elif operator_id == 2:
-            previous_value = values.pop()
-            values.append(min(current_value, previous_value))
+            val = min(current_value, values.pop())
+            while len(values) >= arrival:
+                val = min(val, values.pop())
+            values.append(val)
         elif operator_id == 3:
-            previous_value = values.pop()
-            values.append(max(current_value, previous_value))
+            val = max(current_value, values.pop())
+            while len(values) >= arrival:
+                val = max(val, values.pop())
+            values.append(val)
         elif operator_id == 5:
             previous_value = values.pop()
             values.append(1 if previous_value > current_value else 0)
             if len(operators):
                 operators.pop()
+                # values.append(float('inf'))
         elif operator_id == 6:
             previous_value = values.pop()
             values.append(1 if previous_value < current_value else 0)
             if len(operators):
                 operators.pop()
+                # values.append(float('inf'))
         elif operator_id == 7:
             previous_value = values.pop()
             values.append(1 if previous_value == current_value else 0)
             if len(operators):
                 operators.pop()
+                # values.append(float('inf'))
 
-def second(binary, cur, operators, values):
+def second(binary, cur, operators, values, count):
     version_sum = 0
     if cur < len(binary):
         packet_version, packet_id, cur = decode_headers(binary, cur)
@@ -111,7 +160,8 @@ def second(binary, cur, operators, values):
             if values[-1] != float('inf'):
                 operators.pop()
                 values.append(float('inf'))
-            operators.append(packet_id)
+            count += 1
+            operators.append((packet_id, count))
             print(f'Packet id: {packet_id}')
             length_type_id = binary[cur]
             cur += 1
@@ -120,18 +170,20 @@ def second(binary, cur, operators, values):
                 cur += 15
                 subpackets_len = cur + total_len
                 while cur < subpackets_len:
-                    vsum, cur_ptr = second(binary, cur, operators, values)
+                    vsum, cur_ptr, cnt = second(binary, cur, operators, values, count)
                     version_sum += vsum
                     cur = cur_ptr
+                    count = cnt
             else:
                 num_subpackets = int(binary[cur:cur+11], 2)
                 cur += 11
                 while num_subpackets > 0:
                     num_subpackets -= 1
-                    vsum, cur_ptr = second(binary, cur, operators, values)
+                    vsum, cur_ptr, cnt = second(binary, cur, operators, values, count)
                     version_sum += vsum
                     cur = cur_ptr
-    return version_sum, cur
+                    count = cnt
+    return version_sum, cur, count
                 
 def solution():
     hex_string = read_file()
@@ -139,7 +191,7 @@ def solution():
     binary = bin(int(hex_string, 16))[2:].zfill(num_of_bits)
     operators = []
     values = [float('inf')]
-    second(binary, 0, operators, values)
+    second(binary, 0, operators, values, 0)
     if len(operators):
         operators.pop()
     while len(operators) > 0:
