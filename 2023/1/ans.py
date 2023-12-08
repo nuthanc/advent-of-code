@@ -1,4 +1,5 @@
 # https://adventofcode.com/2023/day/1
+# Missed this duplicate case: seven6seven, 6one6
 
 from os import path
 from re import findall, search
@@ -33,7 +34,7 @@ def second():
             first_digit = numbers[0]
             last_digit = numbers[-1]
             first_digit_index = search(first_digit, line).start()
-            last_digit_index = search(last_digit, line).start()
+            last_digit_index = line.rfind(last_digit)
         for i in range(len(digits)):
             digit = digits[i]
             match = search(digit, line)
@@ -47,6 +48,7 @@ def second():
                     first_digit = digits_num[i]
                     first_digit_index = index
 
+                index = line.rfind(digit)
                 if last_digit:
                     if index > last_digit_index:
                         last_digit = digits_num[i]
@@ -58,5 +60,5 @@ def second():
     print(s)
 
 
-first()
+# first()
 second()
