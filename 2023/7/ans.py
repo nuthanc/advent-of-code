@@ -14,4 +14,4 @@ def second():
     pass
 
 
-first()
+second()
