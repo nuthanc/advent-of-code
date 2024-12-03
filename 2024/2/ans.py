@@ -106,5 +106,5 @@ def second():
     print(count)
 
 
-# first()
-second()
+first()
+# second()
