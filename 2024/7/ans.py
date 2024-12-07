@@ -21,7 +21,7 @@ def first():
         for i in range(2**power):
             right_test_value = eq_list[0]
             for j in range(len(eq_list) - 1):
-                # 0 - add, 1 - multipley
+                # 0 - add, 1 - multiply
                 if (i >> j) & 1:
                     right_test_value *= eq_list[j + 1]
                 else:

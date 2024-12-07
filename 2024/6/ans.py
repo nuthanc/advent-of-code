@@ -77,7 +77,7 @@ def second():
                     [0] * len(input_string[0]) for _ in range(len(input_string))
                 ]
                 while check_within_bounds(r, c):
-                    if new_visited[r][c] > 4:
+                    if new_visited[r][c] > 3:
                         count += 1
                         break
                     new_visited[r][c] += 1
