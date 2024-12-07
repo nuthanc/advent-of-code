@@ -59,13 +59,13 @@ def first():
                     else:
                         r, c, direction = new_row, new_col, direction
 
-                # print(count)
+                print(count)
                 break
 
 
 def second():
-    print("SECOND QUESTION")
     first()
+    print("SECOND QUESTION")
 
     count = 0
     for i in range(len(input_string)):
@@ -89,14 +89,17 @@ def second():
                     if input_string[new_row][new_col] == "#" or (
                         new_row == i and new_col == j
                     ):
-                        tx, ty = turn_direction[(direction[0], direction[1])]
-                        r, c, direction = r + tx, c + ty, (tx, ty)
+                        while input_string[new_row][new_col] == "#" or (
+                            new_row == i and new_col == j
+                        ):
+                            tx, ty = turn_direction[(direction[0], direction[1])]
+                            new_row, new_col = r + tx, c + ty
+                            direction = (tx, ty)
+                        r, c = new_row, new_col
                     else:
                         r, c, direction = new_row, new_col, direction
 
     print(count)
-    # Need to add it in the path it travels
-    # Brute Force it for those 5k positions, loop -> count more than 4
 
 
 # first()
