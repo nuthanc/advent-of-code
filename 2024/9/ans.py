@@ -19,18 +19,25 @@ def first():
                 parsed_list.append(-1)
         id += 1
 
-    i = 0
-    while i < len(parsed_list):
-        if parsed_list[i] == -1:
-            popped = parsed_list.pop()
-            while popped == -1:
-                popped = parsed_list.pop()
-            parsed_list[i] = popped
-        i += 1
+    non_space_index = None
+    for i in range(len(parsed_list)-1, -1, -1):
+        if parsed_list[i] != -1:
+            non_space_index = i
+            break
+
+    for i in range(len(parsed_list)):
+        if parsed_list[i] == -1 and non_space_index > i:
+            parsed_list[i] = parsed_list[non_space_index]
+            parsed_list[non_space_index] = -1
+            non_space_index -= 1
+            while parsed_list[non_space_index] == -1:
+                non_space_index -= 1
+
 
     s = 0
     for i, item in enumerate(parsed_list):
-        s += i * item
+        if item != -1:
+            s += i * item
     print(s)
 
 def second():
