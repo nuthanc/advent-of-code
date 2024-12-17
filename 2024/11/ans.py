@@ -42,5 +42,5 @@ def second():
     print(len(stone_list))
 
 
-# first()
-second()
+first()
+# second()
